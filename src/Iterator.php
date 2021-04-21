@@ -3,6 +3,7 @@
 namespace Foreacher;
 use Foreacher\Limit;
 use Foreacher\Cycle;
+use Foreacher\Multi;
 
 /**
  * Transform and store arrays as ArrayIterator objects, allowing
@@ -100,6 +101,21 @@ class Iterator
 					call_user_func($function, $item, $args);
 				}
 			}
+		}
+	}
+
+	public function loopAll(callable $callable, array $args = null)
+	{
+		$multiple = new Multi(Multi::MIT_NEED_ANY|Multi::MIT_KEYS_ASSOC);
+
+		foreach ($this->arrays as $key => $array) {
+			
+			$multiple->attachIterator($array, $key);
+		}
+
+		foreach ($multiple as $item) {
+			
+			call_user_func($callable, $item, $args);
 		}
 	}
 }

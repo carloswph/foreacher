@@ -59,3 +59,98 @@ $iterator->looping('1', 2.5, 'echoR');
 
 // Returns: 1 3 5 6 7 11 15 24 34 56 66 77 124 1 3 5 6 7 11 15 24 34 56 66 77 124 1 3 5 6 7 11
 ```
+## Looping all stored arrays
+
+It is also possible to loop all stored arrays applying the same function. In this case, the result will be a single array in which elements are actually subarrays that bring a key-value logic, where the key refers to the stored array name and the value the respective value in the loop position. Let's apply it to the same two arrays to make it clearer.
+
+```php
+function echoR($item)
+{
+	var_dump($item);
+}
+
+$iterator->loopAll('echoR');
+
+/* Returns:
+
+array(2) {
+  [1]=>
+  int(1)
+  [2]=>
+  int(3)
+}
+array(2) {
+  [1]=>
+  int(3)
+  [2]=>
+  int(455)
+}
+array(2) {
+  [1]=>
+  int(5)
+  [2]=>
+  int(5)
+}
+array(2) {
+  [1]=>
+  int(6)
+  [2]=>
+  int(89)
+}
+array(2) {
+  [1]=>
+  int(7)
+  [2]=>
+  int(72)
+}
+array(2) {
+  [1]=>
+  int(11)
+  [2]=>
+  int(2434)
+}
+array(2) {
+  [1]=>
+  int(15)
+  [2]=>
+  int(1)
+}
+array(2) {
+  [1]=>
+  int(24)
+  [2]=>
+  int(1233)
+}
+array(2) {
+  [1]=>
+  int(34)
+  [2]=>
+  int(4)
+}
+array(2) {
+  [1]=>
+  int(56)
+  [2]=>
+  NULL
+}
+array(2) {
+  [1]=>
+  int(66)
+  [2]=>
+  NULL
+}
+array(2) {
+  [1]=>
+  int(77)
+  [2]=>
+  NULL
+}
+array(2) {
+  [1]=>
+  int(124)
+  [2]=>
+  NULL
+}
+*/ 
+
+```
