@@ -1,0 +1,13 @@
+{
+    "name": "carloswph/foreacher",
+    "description": "Set of tools to improve, manipulate and deal with foreach loops better.",
+    "type": "library",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+    	"psr-4": {
+    		"Foreacher\\": "src/"
+    	}
+    }
+}
