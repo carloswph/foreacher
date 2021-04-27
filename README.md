@@ -90,67 +90,24 @@ array(2) {
   int(5)
   [2]=>
   int(5)
-}
-array(2) {
-  [1]=>
-  int(6)
-  [2]=>
-  int(89)
-}
-array(2) {
-  [1]=>
-  int(7)
-  [2]=>
-  int(72)
-}
-array(2) {
-  [1]=>
-  int(11)
-  [2]=>
-  int(2434)
-}
-array(2) {
-  [1]=>
-  int(15)
-  [2]=>
-  int(1)
-}
-array(2) {
-  [1]=>
-  int(24)
-  [2]=>
-  int(1233)
-}
-array(2) {
-  [1]=>
-  int(34)
-  [2]=>
-  int(4)
-}
-array(2) {
-  [1]=>
-  int(56)
-  [2]=>
-  NULL
-}
-array(2) {
-  [1]=>
-  int(66)
-  [2]=>
-  NULL
-}
-array(2) {
-  [1]=>
-  int(77)
-  [2]=>
-  NULL
-}
-array(2) {
-  [1]=>
-  int(124)
-  [2]=>
-  NULL
-}
+} ... and so on...
 */ 
+
+```
+## Filter iterations
+
+It is also possible to apply filters before starting the loop, by using the filterValues() method. Doing that, the iteration won't be occurring for the filtered values. The method accepts integers, strings, floats or an array of those elements.
+
+```php
+function echoR($item)
+{
+  echo $item . PHP_EOL;
+}
+
+$iterator->filterValues('1', [1, '3', 11], 'echoR');
+// Returns: 5 6 7 15 24 34 56 66 77 124
+
+$iterator->filterKeys('1', [1, '3', 11], 'echoR');
+// Returns: 1 5 7 11 15 24 34 56 66 124
 
 ```

@@ -4,6 +4,7 @@ namespace Foreacher;
 use Foreacher\Limit;
 use Foreacher\Cycle;
 use Foreacher\Multi;
+use Foreacher\Filter;
 
 /**
  * Transform and store arrays as ArrayIterator objects, allowing
@@ -42,6 +43,17 @@ class Iterator
 		$this->arrays[$id] = new \ArrayIterator($data);
 	}
 
+	/**
+	 * Limits the loop to the first N elements of a named array.
+	 *
+	 * @param  string  $id  Key of the stored array.
+	 * @param  int  $number  Number of elements to loop over, starting in the first element.
+	 * @param  callable  $callable  Function to apply on the looped items.
+	 *
+	 * @since  1.0.0
+	 * @uses  Foreacher\Limit
+	 * @return  void()
+	 */
 	public function limitFirst(string $id, int $number, callable $callable, array $args = null)
 	{
 		foreach (new Limit($this->arrays[$id], 0, $number) as $item) {
@@ -57,6 +69,17 @@ class Iterator
 		}
 	}
 
+	/**
+	 * Limits the loop to the last N elements of a named array.
+	 *
+	 * @param  string  $id  Key of the stored array.
+	 * @param  int  $number  Number of elements to loop over, starting from the Nth element before the last.
+	 * @param  callable  $callable  Function to apply on the looped items.
+	 *
+	 * @since  1.0.0
+	 * @uses  Foreacher\Limit
+	 * @return  void()
+	 */
 	public function limitLast(string $id, int $number, callable $callable, array $args = null)
 	{
 		foreach (new Limit($this->arrays[$id], count($this->arrays[$id]) - $number) as $item) {
@@ -72,6 +95,17 @@ class Iterator
 		}
 	}
 
+	/**
+	 * Limits the loop to all elements starting from the Nth element.
+	 *
+	 * @param  string  $id  Key of the stored array.
+	 * @param  int  $number  Position to starting the loop from in the array.
+	 * @param  callable  $callable  Function to apply on the looped items.
+	 *
+	 * @since  1.0.0
+	 * @uses  Foreacher\Limit
+	 * @return  void()
+	 */
 	public function limitFrom(string $id, int $number, callable $callable, array $args = null)
 	{
 		foreach (new Limit($this->arrays[$id], $number) as $item) {
@@ -87,6 +121,17 @@ class Iterator
 		}
 	}
 
+	/**
+	 * Performs the loop a certain number of times or cycles.
+	 *
+	 * @param  string  $id  Key of the stored array.
+	 * @param  float  $number  Number of cycles or revolutions.
+	 * @param  callable  $callable  Function to apply on the looped items.
+	 *
+	 * @since  1.0.0
+	 * @uses  Foreacher\Cycle
+	 * @return  void()
+	 */
 	public function looping(string $id, float $number, callable $callable, array $args = null)
 	{
 		$cycle = new Cycle($this->arrays[$id]);
@@ -116,6 +161,41 @@ class Iterator
 		foreach ($multiple as $item) {
 			
 			call_user_func($callable, $item, $args);
+		}
+	}
+
+	public function filterValues(string $id, mixed $values, callable $callable, array $args = null)
+	{
+		$filter = new Filter($this->arrays[$id], $values);
+
+		foreach ($filter as $item) {
+
+			call_user_func($callable, $item, $args);
+
+			if(is_array($callable)) {
+				foreach($callable as $function) {
+					
+					call_user_func($function, $item, $args);
+				}
+			}
+		}
+
+	}
+
+	public function filterKeys(string $id, mixed $keys, callable $callable, array $args = null)
+	{
+		$filter = new Filter($this->arrays[$id], null, $keys);
+
+		foreach ($filter as $item) {
+
+			call_user_func($callable, $item, $args);
+
+			if(is_array($callable)) {
+				foreach($callable as $function) {
+					
+					call_user_func($function, $item, $args);
+				}
+			}
 		}
 	}
 }
