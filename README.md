@@ -111,3 +111,17 @@ $iterator->filterKeys('1', [1, '3', 11], 'echoR');
 // Returns: 1 5 7 11 15 24 34 56 66 124
 
 ```
+## Regex matching
+
+From 1.2.0v, stored arrays can be traversed only on matching elements, from a given Regex expression, using the method regexMatch().
+
+```php
+function echoR($item)
+{
+  echo $item . PHP_EOL;
+}
+
+$iterator->regexMatch('1', "/^[1-3]+[0-3]*$/", 'echoR');
+// Returns: 1 3 11
+
+```

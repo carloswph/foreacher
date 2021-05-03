@@ -5,6 +5,7 @@ use Foreacher\Limit;
 use Foreacher\Cycle;
 use Foreacher\Multi;
 use Foreacher\Filter;
+use Foreacher\Regex;
 
 /**
  * Transform and store arrays as ArrayIterator objects, allowing
@@ -149,6 +150,15 @@ class Iterator
 		}
 	}
 
+	/**
+	 * Loops all stored arrays using the same given callback.
+	 *
+	 * @param  callable  $callable  Function to apply on the looped items.
+	 *
+	 * @since  1.0.0
+	 * @uses  Foreacher\Multi
+	 * @return  void()
+	 */
 	public function loopAll(callable $callable, array $args = null)
 	{
 		$multiple = new Multi(Multi::MIT_NEED_ANY|Multi::MIT_KEYS_ASSOC);
@@ -164,6 +174,17 @@ class Iterator
 		}
 	}
 
+	/**
+	 * Exclude or filters elements from the loop by value.
+	 *
+	 * @param  string  $id  Key of the stored array.
+	 * @param  mixed  $values  Array, integer or string representing the values to be filtered.
+	 * @param  callable  $callable  Function to apply on the looped items.
+	 *
+	 * @since  1.1.0
+	 * @uses  Foreacher\Filter
+	 * @return  void()
+	 */
 	public function filterValues(string $id, mixed $values, callable $callable, array $args = null)
 	{
 		$filter = new Filter($this->arrays[$id], $values);
@@ -182,11 +203,50 @@ class Iterator
 
 	}
 
+	/**
+	 * Exclude or filters elements from the loop by keys.
+	 *
+	 * @param  string  $id  Key of the stored array.
+	 * @param  mixed  $keys  Array, integer or string representing the keys to be filtered.
+	 * @param  callable  $callable  Function to apply on the looped items.
+	 *
+	 * @since  1.1.0
+	 * @uses  Foreacher\Filter
+	 * @return  void()
+	 */
 	public function filterKeys(string $id, mixed $keys, callable $callable, array $args = null)
 	{
 		$filter = new Filter($this->arrays[$id], null, $keys);
 
 		foreach ($filter as $item) {
+
+			call_user_func($callable, $item, $args);
+
+			if(is_array($callable)) {
+				foreach($callable as $function) {
+					
+					call_user_func($function, $item, $args);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Limits the loop to all elements that matches the submitted regex pattern.
+	 *
+	 * @param  string  $id  Key of the stored array.
+	 * @param  string  $regex  Regex expression to find matches.
+	 * @param  callable  $callable  Function to apply on the looped items.
+	 *
+	 * @since  1.2.0
+	 * @uses  Foreacher\Regex
+	 * @return  void()
+	 */
+	public function regexMatch(string $id, string $regex, callable $callable, array $args = null)
+	{
+		$match = new Regex($this->arrays[$id], $regex);
+
+		foreach ($match as $item) {
 
 			call_user_func($callable, $item, $args);
 
